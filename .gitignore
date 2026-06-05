@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.venv/
+venv/
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+
+# Tests / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Data & artefacts
+data/overlays/
+data/erp_outbox.jsonl
+data/feedback.jsonl
+data/spec_corpus.json
+reports/
+mlruns/
+mlflow.db
+
+# Models
+*.pt
+*.onnx
+yolov8*.pt
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+terraform.tfvars
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Exclude Specific Files
+SAMPLE_README.md
+*.pdf

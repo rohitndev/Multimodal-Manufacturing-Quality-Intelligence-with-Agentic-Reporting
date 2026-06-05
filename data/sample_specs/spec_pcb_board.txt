@@ -1,0 +1,19 @@
+PCB ASSEMBLY — PRODUCT SPECIFICATION (PCB-7781)
+
+1. Scope
+Acceptance criteria for double-sided 1.6 mm FR-4 PCB panels after SMT reflow.
+
+2. Solder Joints
+2.1 Open joints (no solder fillet) are CRITICAL.
+2.2 Solder bridges between adjacent pads are CRITICAL.
+2.3 Insufficient fillet (<50% pad coverage) is MAJOR.
+
+3. Surface Defects
+3.1 Cracks crossing copper traces are CRITICAL.
+3.2 Voids in pad area > 25% of pad surface are MAJOR.
+3.3 Scratches in silkscreen that do not reach copper are MINOR.
+
+4. Disposition Rules
+- CRITICAL defects → FAIL (board scrap).
+- MAJOR defects   → QUARANTINE for hand-rework.
+- MINOR cosmetic  → PASS but log to MES.

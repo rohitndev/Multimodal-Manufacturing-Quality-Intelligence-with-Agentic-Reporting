@@ -1,0 +1,26 @@
+METAL PANEL — PRODUCT SPECIFICATION (MP-1024)
+
+1. Scope
+This specification defines acceptance criteria for cold-rolled metal panels
+supplied to assembly line A3.
+
+2. Surface Finish
+2.1 Scratches longer than 5.0 mm or wider than 0.3 mm are CRITICAL.
+2.2 Scratches between 1.0 mm and 5.0 mm in length are MAJOR and require rework.
+2.3 Scratches shorter than 1.0 mm are MINOR and acceptable up to 3 per panel.
+
+3. Structural Defects
+3.1 Any crack visible at 1× magnification is CRITICAL — quarantine immediately.
+3.2 Voids exceeding 2.0 mm² in area are MAJOR.
+3.3 Dents deeper than 0.5 mm or wider than 6.0 mm are MAJOR. Smaller dents
+    are MINOR if outside the visible cosmetic zone.
+
+4. Cosmetic Finish
+4.1 Stains exceeding 10 mm² in area on the A-side are MAJOR.
+4.2 Burrs along trimmed edges greater than 0.2 mm in height are MAJOR.
+
+5. Disposition Rules
+- CRITICAL → FAIL (scrap or supplier return).
+- MAJOR    → QUARANTINE pending QA engineer disposition.
+- MINOR    → REWORK (sand / polish / re-coat).
+- Clean panels → PASS.

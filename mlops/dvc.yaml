@@ -1,0 +1,19 @@
+stages:
+  ingest_specs:
+    cmd: python run.py ingest --specs-dir data/sample_specs
+    deps:
+      - data/sample_specs
+      - src/rag
+    outs:
+      - data/spec_corpus.json
+
+  yolo_finetune:
+    cmd: python -m src.vision.train --data data/yolo --epochs 50
+    deps:
+      - data/yolo
+      - src/vision
+    outs:
+      - models/yolov8_finetuned.pt
+    metrics:
+      - metrics/yolo_metrics.json:
+          cache: false
