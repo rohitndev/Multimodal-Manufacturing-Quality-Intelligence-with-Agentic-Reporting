@@ -94,15 +94,17 @@ class SeverityClassifier:
 
     @staticmethod
     def _score_to_level(score: float) -> SeverityResult:
-        if score >= 0.66:
-            level = "Critical"
-            probs = {"Critical": score, "Major": 1 - score, "Minor": max(0.0, 0.1 - score)}
-        elif score >= 0.33:
-            level = "Major"
-            probs = {"Critical": score / 2, "Major": score, "Minor": 1 - score}
-        else:
-            level = "Minor"
-            probs = {"Critical": score / 3, "Major": score, "Minor": 1 - score}
-        total = sum(probs.values()) or 1.0
-        probs = {k: round(v / total, 4) for k, v in probs.items()}
-        return SeverityResult(level=level, score=round(score, 4), probabilities=probs)
+        import math
+
+        s = float(min(1.0, max(0.0, score)))
+        # Soft assignment over three severity bands, peaked at the matching band,
+        # so the probability argmax is always consistent with the reported level.
+        centers = {"Critical": 0.85, "Major": 0.5, "Minor": 0.15}
+        temp = 0.2
+        logits = {k: -((s - c) ** 2) / (2 * temp * temp) for k, c in centers.items()}
+        m = max(logits.values())
+        exps = {k: math.exp(v - m) for k, v in logits.items()}
+        total = sum(exps.values()) or 1.0
+        probs = {k: round(v / total, 4) for k, v in exps.items()}
+        level = max(probs, key=probs.get)
+        return SeverityResult(level=level, score=round(s, 4), probabilities=probs)

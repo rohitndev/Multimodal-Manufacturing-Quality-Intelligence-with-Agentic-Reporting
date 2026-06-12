@@ -79,28 +79,38 @@ class DefectDetector:
         edges = cv2.Canny(blurred, 50, 150)
         contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-        detections: List[Detection] = []
         h, w = gray.shape[:2]
+        frame_mean = float(blurred.mean())
         min_area = (h * w) * 0.0005
-        for i, c in enumerate(contours):
+        detections: List[Detection] = []
+        for c in contours:
             area = cv2.contourArea(c)
             if area < min_area:
                 continue
             x, y, bw, bh = cv2.boundingRect(c)
             aspect = bw / max(bh, 1)
-            if aspect > 4 or aspect < 0.25:
-                defect = "scratch"
-            elif area > (h * w) * 0.02:
-                defect = "dent"
+            extent = area / max(bw * bh, 1)  # fraction of the bbox the blob fills
+            if extent < 0.15 or aspect >= 4 or aspect <= 0.25:
+                defect = "scratch"           # thin, elongated line
+            elif 0.6 <= aspect <= 1.6 and extent >= 0.5:
+                defect = "dent"              # compact, round, filled
             else:
-                defect = "void"
+                defect = "stain"             # filled irregular blob
+            roi = blurred[y:y + bh, x:x + bw]
+            roi_edges = edges[y:y + bh, x:x + bw]
+            if roi.size:
+                darkness = (frame_mean - float(roi.min())) / max(frame_mean, 1.0)
+                contrast = abs(float(roi.mean()) - frame_mean) / 128.0
+                edge_density = float((roi_edges > 0).sum()) / max(roi_edges.size, 1)
+            else:
+                darkness = contrast = edge_density = 0.0
+            confidence = float(np.clip(0.6 + 0.2 * darkness + 0.35 * contrast + 0.6 * edge_density, 0.6, 0.95))
             detections.append(
                 Detection(
                     defect_type=defect,
-                    confidence=min(0.5 + area / (h * w), 0.95),
+                    confidence=round(confidence, 4),
                     bbox=[x, y, x + bw, y + bh],
                 )
             )
-            if len(detections) >= 5:
-                break
-        return detections
+        detections.sort(key=lambda d: d.confidence, reverse=True)
+        return detections[:5]
